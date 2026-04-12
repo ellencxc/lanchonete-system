@@ -30,6 +30,26 @@ Nesta etapa, o sistema permite:
 # Banco de Dados
 - PostgreSQL
 
+## AC2 - Cadastro e gerenciamento de clientes
+
+### Funcionalidades implementadas:
+
+#### 👤 Clientes
+- Cadastrar cliente
+- Listar clientes
+- Editar cliente
+- Excluir cliente
+
+#### 🍔 Produtos (melhoria)
+- Editar produto
+
+### Tecnologias utilizadas:
+- Frontend: HTML, CSS, JavaScript
+- Backend: Python (Flask)
+- Banco de dados: PostgreSQL
+
+### Integração:
+Sistema totalmente integrado entre frontend, backend e banco de dados, seguindo os princípios do Manifesto Ágil.
 # Estrutura do Projeto
 
 ```bash
@@ -39,7 +59,7 @@ lanchonete-system/
 │   └── app.py
 │
 ├── frontend/
-│   └── cadastro_produto.html
+│   └── index.html
 │
 ├── database/
 │   └── schema.sql

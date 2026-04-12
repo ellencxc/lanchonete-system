@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Sistema da Lanchonete</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f4f6f9;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #ff5733;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.card {
+  background: #fafafa;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+img {
+  width: 80px;
+}
+
+.preco {
+  color: green;
+  font-weight: bold;
+}
+
+.btn-editar {
+  background: #3498db;
+  margin-top: 5px;
+}
+
+.btn-excluir {
+  background: red;
+  margin-top: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🍔 Sistema da Lanchonete</h1>
+
+<div class="container">
+
+<!-- PRODUTOS -->
+<div class="box">
+<h2>Produtos</h2>
+
+<input id="nomeProduto" placeholder="Nome">
+<input id="descricaoProduto" placeholder="Descrição">
+<input id="precoProduto" placeholder="Preço">
+<button id="btnProduto" onclick="salvarProduto()">Cadastrar</button>
+
+<div id="listaProdutos"></div>
+</div>
+
+<!-- CLIENTES -->
+<div class="box">
+<h2>Clientes</h2>
+
+<input id="nomeCliente" placeholder="Nome">
+<input id="telefoneCliente" placeholder="Telefone">
+<input id="emailCliente" placeholder="Email">
+<button id="btnCliente" onclick="salvarCliente()">Cadastrar</button>
+
+<div id="listaClientes"></div>
+</div>
+
+</div>
+
+<script>
+// ================= PRODUTO =================
+let produtoEditando = null;
+
+async function salvarProduto() {
+  const nome = nomeProduto.value;
+  const descricao = descricaoProduto.value;
+  const preco = precoProduto.value;
+
+  if (produtoEditando) {
+    await fetch(`http://127.0.0.1:5000/produtos/${produtoEditando}`, {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ nome, descricao, preco })
+    });
+
+    produtoEditando = null;
+    btnProduto.innerText = "Cadastrar";
+  } else {
+    await fetch("http://127.0.0.1:5000/produtos", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ nome, descricao, preco })
+    });
+  }
+
+  nomeProduto.value = "";
+  descricaoProduto.value = "";
+  precoProduto.value = "";
+
+  carregarProdutos();
+}
+
+function editarProduto(p) {
+  nomeProduto.value = p.nome;
+  descricaoProduto.value = p.descricao;
+  precoProduto.value = p.preco;
+
+  produtoEditando = p.id;
+  btnProduto.innerText = "Atualizar Produto";
+}
+
+async function excluirProduto(id) {
+  await fetch(`http://127.0.0.1:5000/produtos/${id}`, { method: "DELETE" });
+  carregarProdutos();
+}
+
+async function carregarProdutos() {
+  const res = await fetch("http://127.0.0.1:5000/produtos");
+  const dados = await res.json();
+
+  listaProdutos.innerHTML = "";
+
+  dados.forEach(p => {
+    listaProdutos.innerHTML += `
+      <div class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png">
+        <h3>${p.nome}</h3>
+        <p>${p.descricao}</p>
+        <p class="preco">R$ ${p.preco}</p>
+
+        <button class="btn-editar" onclick='editarProduto(${JSON.stringify(p)})'>Editar</button>
+        <button class="btn-excluir" onclick="excluirProduto(${p.id})">Excluir</button>
+      </div>
+    `;
+  });
+}
+
+// ================= CLIENTE =================
+let clienteEditando = null;
+
+async function salvarCliente() {
+  const nome = nomeCliente.value;
+  const telefone = telefoneCliente.value;
+  const email = emailCliente.value;
+
+  if (clienteEditando) {
+    await fetch(`http://127.0.0.1:5000/clientes/${clienteEditando}`, {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ nome, telefone, email })
+    });
+
+    clienteEditando = null;
+    btnCliente.innerText = "Cadastrar";
+  } else {
+    await fetch("http://127.0.0.1:5000/clientes", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ nome, telefone, email })
+    });
+  }
+
+  nomeCliente.value = "";
+  telefoneCliente.value = "";
+  emailCliente.value = "";
+
+  carregarClientes();
+}
+
+function editarCliente(c) {
+  nomeCliente.value = c.nome;
+  telefoneCliente.value = c.telefone;
+  emailCliente.value = c.email;
+
+  clienteEditando = c.id;
+  btnCliente.innerText = "Atualizar Cliente";
+}
+
+async function excluirCliente(id) {
+  await fetch(`http://127.0.0.1:5000/clientes/${id}`, { method: "DELETE" });
+  carregarClientes();
+}
+
+async function carregarClientes() {
+  const res = await fetch("http://127.0.0.1:5000/clientes");
+  const dados = await res.json();
+
+  listaClientes.innerHTML = "";
+
+  dados.forEach(c => {
+    listaClientes.innerHTML += `
+      <div class="card">
+        <h3>${c.nome}</h3>
+        <p>${c.telefone}</p>
+        <p>${c.email}</p>
+
+        <button class="btn-editar" onclick='editarCliente(${JSON.stringify(c)})'>Editar</button>
+        <button class="btn-excluir" onclick="excluirCliente(${c.id})">Excluir</button>
+      </div>
+    `;
+  });
+}
+
+// INIT
+carregarProdutos();
+carregarClientes();
+</script>
+
+</body>
+</html>
