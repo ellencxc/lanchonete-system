@@ -34,7 +34,7 @@ Nesta etapa, o sistema permite:
 
 # Funcionalidades implementadas:
 
-# 👤 Clientes
+# Clientes
 - Cadastrar cliente
 - Listar clientes
 - Editar cliente
@@ -83,6 +83,77 @@ Sistema Full Stack desenvolvido para gerenciamento de uma lanchonete utilizando:
 - Finalizar pedido
 - Listar pedidos realizados
 - Excluir pedidos realizados
+
+# PROVA
+
+## Funcionalidades
+
+# Produtos
+- Cadastrar produtos
+- Listar produtos
+- Editar produtos
+- Excluir produtos
+
+# Clientes
+- Cadastrar clientes
+- Listar clientes
+- Editar clientes
+- Excluir clientes
+
+# Pedidos
+- Realizar pedidos
+- Exibir pedidos realizados
+- Excluir pedidos
+
+# Dashboard / Relatórios
+- Total de produtos cadastrados
+- Total de clientes cadastrados
+- Total de pedidos realizados
+- Faturamento total
+
+# Controle de Estoque
+- Cadastro de quantidade em estoque
+- Exibição do estoque disponível
+- Atualização automática após vendas
+- Bloqueio de vendas quando o estoque é igual a zero
+
+
+## Banco de Dados
+
+Tabelas utilizadas:
+
+# produtos
+
+- id
+- nome
+- descricao
+- preco
+- estoque
+
+# clientes
+
+- id
+- nome
+- telefone
+- email
+
+# pedidos
+
+- id
+- cliente_id
+- produtos
+- total
+
+
+# Tecnologias Utilizadas
+
+- Python
+- Flask
+- PostgreSQL
+- HTML
+- CSS
+- JavaScript
+
 
 ```bash
 lanchonete-system/
